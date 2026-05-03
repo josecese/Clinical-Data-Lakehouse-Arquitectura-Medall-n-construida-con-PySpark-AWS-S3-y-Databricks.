@@ -1,0 +1,22 @@
+# Secretos y credenciales (¡NUNCA SUBIR!)
+.env
+*.pem
+*.key
+
+# Archivos de estado de Terraform (Contienen metadata sensible de tu AWS)
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/.terraform.lock.hcl
+
+# Datos crudos (No queremos subir gigabytes de datos a GitHub)
+data/
+*.csv
+*.parquet
+*.json
+
+# Archivos temporales de Mac y Python
+.DS_Store
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
