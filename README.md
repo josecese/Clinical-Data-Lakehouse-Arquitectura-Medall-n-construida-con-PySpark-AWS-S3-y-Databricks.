@@ -1,58 +1,80 @@
-🏥 Clinical Data Lakehouse Project
-¡Bienvenido al repositorio del proyecto Clinical Data Lakehouse! 🚀
+# 🏥 Clinical Data Lakehouse Project
 
-Este proyecto demuestra una solución integral de ingeniería de datos para el sector salud, utilizando una arquitectura moderna de Lakehouse para procesar datos clínicos complejos, garantizando la calidad del dato y el cumplimiento de normativas de privacidad.
+![Status](https://img.shields.io/badge/Status-Under_Construction-warning?style=for-the-badge)
+![Apache Spark](https://img.shields.io/badge/PySpark-E25A1C?style=for-the-badge&logo=Apache-Spark&logoColor=white)
+![Databricks](https://img.shields.io/badge/Databricks-FF3621?style=for-the-badge&logo=Databricks&logoColor=white)
+![Terraform](https://img.shields.io/badge/Terraform-844FBA?style=for-the-badge&logo=Terraform&logoColor=white)
 
-🏗️ Arquitectura de Datos
-El proyecto sigue la Medallion Architecture para garantizar un flujo de datos organizado y auditable:
+Welcome to the **Clinical Data Lakehouse Project** repository! 🚀  
+This project demonstrates a comprehensive, scalable data engineering solution designed for the healthcare sector. It highlights industry best practices in data lakehouse architecture, data quality assurance, and automated infrastructure.
 
-Capa Bronze: Almacena los datos crudos (Raw) ingeridos desde archivos Parquet/CSV. Es nuestra "fuente de verdad" inmutable.
+---
+## 🏗️ Data Architecture
 
-Capa Silver: Capa de curación donde aplicamos limpieza, estandarización de tipos, manejo de nulos y enmascaramiento de datos sensibles (PII). Aquí es donde el EDA (Exploratory Data Analysis) se transforma en reglas de negocio.
+The data architecture for this project follows the **Medallion Architecture**, leveraging the ACID compliance and time-travel capabilities of **Delta Lake**:
 
-Capa Oro: Datos listos para el negocio, modelados en un esquema de estrella (Star Schema) para alimentar dashboards de Power BI o modelos de Machine Learning.
+1. **🥉 Bronze Layer**: Stores raw clinical data as-is from source systems. Data is ingested from Parquet/CSV files into the data lake.
+2. **🥈 Silver Layer**: This layer executes data cleansing, standardization, null handling, and strict PII (Personally Identifiable Information) masking. Pipelines use PySpark and MERGE (Upsert) operations for incremental loading.
+3. **🥇 Gold Layer**: Houses business-ready data modeled into a star schema, optimized for business intelligence, reporting, and advanced analytics.
 
-📖 Resumen Técnico
-Este proyecto destaca habilidades avanzadas en:
+---
+## 📖 Project Overview
 
-Ingeniería de Datos: Pipelines escalables con PySpark y Databricks.
+This project involves:
 
-Almacenamiento Moderno: Implementación de Delta Lake para garantizar transacciones ACID y cargas incrementales (Upserts/Merge).
+1. **Data Architecture**: Designing a modern Data Lakehouse utilizing the Medallion Architecture.
+2. **ETL Pipelines**: Developing scalable data pipelines using **PySpark** to extract, transform, and load clinical datasets.
+3. **Data Quality & Security**: Implementing robust Exploratory Data Analysis (EDA) scripts, regex pattern validation (e.g., SSN formats), and logic validation.
+4. **Infrastructure as Code (IaC)**: Provisioning cloud resources (AWS S3, EC2, Databricks workspaces) using **Terraform**.
+5. **Orchestration**: Managing complex pipeline dependencies using **Apache Airflow**.
 
-Calidad del Dato: Perfilado profundo con Regex y validaciones lógicas de negocio.
+🎯 This repository is an excellent resource for showcasing expertise in:
+- Big Data Engineering
+- PySpark & Delta Lake Development
+- Data Architecture & Modeling
+- Infrastructure as Code (IaC)
+- Data Quality & Governance
 
-Infraestructura como Código: Configuración de entorno con Terraform y orquestación con Airflow.
+---
 
-🚀 Requisitos y Alcance
-Ingeniería de Datos
-Fuentes de Datos: Integración de sistemas clínicos (Pacientes, Encuentros, Medicaciones) en formato Parquet.
+## 🚀 Project Requirements & Scope
 
-Calidad: Limpieza rigurosa de duplicados y resolución de inconsistencias temporales (ej. fechas de defunción vs nacimiento).
+### Data Engineering Pipeline
 
-Seguridad: Eliminación estricta de SSN, Pasaportes y Licencias en cumplimiento con estándares de privacidad.
+#### Objective
+Develop a robust data pipeline to consolidate clinical entities (Patients, Encounters, Medications), enabling secure analytical reporting while maintaining patient privacy.
 
-Integración: Consolidación de fuentes en un modelo de datos relacional optimizado para analítica.
+#### Specifications
+- **Data Sources**: Clinical datasets ingested in Parquet format.
+- **Data Quality & EDA**: Extensive data profiling, including exact structural validation and detection of biological/logical anomalies (e.g., death dates preceding birth dates).
+- **Security Compliance**: Strict adherence to healthcare privacy standards by removing or masking sensitive identifiers (SSN, Passports, Drivers Licenses).
+- **Integration**: Utilizing Delta Lake for efficient Upserts, ensuring no duplicate records exist during incremental loads.
+- **Documentation**: Comprehensive logging configured within Python scripts to maintain an auditable trail of all transformations.
 
-Análisis y BI
-Comportamiento del Paciente: Análisis de recurrencia en visitas médicas.
+---
 
-Métricas Clínicas: Tendencias de prescripción médica y demografía poblacional.
-
-📂 Estructura del Repositorio
-Siguiendo las mejores prácticas de la industria:
-
-Plaintext
+## 📂 Repository Structure
+```text
 clinical-data-lakehouse/
 │
-├── Airflow/                # Orquestación de DAGs para los procesos ETL
-├── terraform/              # Infraestructura como Código (AWS/Azure)
-├── notebooks/              # Versiones experimentales de análisis en Databricks
+├── Airflow/                            # Orchestration DAGs for ETL pipelines
+│   └── dags/
 │
-├── src/                    # Lógica principal del Pipeline (Producción)
-│   ├── bronze/             # Ingesta y Script Maestro de Exploración (EDA)
-│   ├── silver/             # Limpieza, Upserts con Delta Lake y Calidad
-│   └── gold/               # Modelado de tablas de Hechos y Dimensiones
+├── terraform/                          # Infrastructure as Code (AWS/Databricks setup)
 │
-├── docs/                   # Documentación de Arquitectura y Diccionario de Datos
-├── tests/                  # Pruebas unitarias para validar las transformaciones
-└── README.md               # Resumen del proyecto
+├── notebooks/                          # Experimental and exploratory Databricks notebooks
+│
+├── src/                                # Production-grade PySpark scripts
+│   ├── ingestion/                      # Scripts for extracting and loading raw data
+│   │   └── 01_bronze_ingestion.py
+│   ├── bronze/                         # Exploratory Data Analysis (EDA) and profiling
+│   │   └── 02_eda_patients.py
+│   ├── silver/                         # Cleansing, PII masking, and Upsert pipelines
+│   │   └── 01_silver_patients_pipeline.py
+│   └── gold/                           # Analytical models and Star Schema (Pending)
+│
+├── docs/                               # Architecture diagrams and documentation
+│
+├── .env                                # Environment variables (ignored in Git)
+├── .gitignore                          # Files and directories to be ignored by Git
+└── README.md                           # Project overview and instructions
